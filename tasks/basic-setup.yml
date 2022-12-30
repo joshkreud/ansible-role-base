@@ -1,8 +1,4 @@
 ---
-- name: Set timezone
-  community.general.timezone:
-    name: "{{ time_zone }}"
-
 - name: Make Bashcompletion on anible user case insensitive
   ansible.builtin.lineinfile:
     path: /etc/inputrc
@@ -34,6 +30,10 @@
   tags:
     - never
     - apt-upgrade
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ time_zone }}"
 
 - name: Set Max journal log size
   ansible.builtin.lineinfile:
