@@ -1,0 +1,31 @@
+---
+- name: Install Ufw
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+
+- name: Set SSH limiting in UFW
+  community.general.ufw:
+    rule: limit
+    port: "{{ ssh_tcp_port }}"
+    proto: tcp
+  notify: Restart ufw
+
+- name: Allow UFW Ports
+  when: lockdown_allow_ports is defined
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop: "{{ lockdown_allow_ports }}"
+  notify: Restart ufw
+  tags: [skip_ansible_lint]
+
+- name: Deny Other Ports
+  community.general.ufw:
+    policy: deny
+  notify: Restart ufw

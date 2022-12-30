@@ -1,0 +1,13 @@
+---
+time_zone: Europe/Berlin
+lockdown_allow_ports:
+  - port: 80
+    proto: tcp
+  - port: 443
+    proto: tcp
+default_packages:
+  - git
+  - htop
+  - iotop
+  - vim
+ssh_tcp_port: 22

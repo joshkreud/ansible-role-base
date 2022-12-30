@@ -1,0 +1,25 @@
+---
+- name: Make sure sshd is installed
+  ansible.builtin.package:
+    name: openssh-server
+    state: present
+
+- name: Disable SSH Password Authentication
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    state: present
+    backup: yes
+  notify:
+    - Restart sshd
+
+- name: Disable SSH Root Login
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+    backup: yes
+  notify:
+    - Restart sshd

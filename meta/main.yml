@@ -1,0 +1,23 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: base
+  author: joshkreud
+  description: |
+    Setup basic stuff like users and Hostname
+  issue_tracker_url: https://github.com/OpenJKSoftware/ansible-role-base/issues
+  company: "Joshua Kreuder - Software"
+  license: "MIT"
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - system
+    - server
+    - tools

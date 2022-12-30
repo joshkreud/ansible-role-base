@@ -1,0 +1,18 @@
+---
+- name: Updating hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+  notify: Reboot System
+
+- name: Update /etc/hosts
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: "127.0.0.1    {{ hostname }}"
+    backup: true
+    state: present
+  notify: Reboot System
+
+- name: Flush Handlers
+  ansible.builtin.meta: flush_handlers

@@ -1,0 +1,42 @@
+---
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ time_zone }}"
+
+- name: Make Bashcompletion on anible user case insensitive
+  ansible.builtin.lineinfile:
+    path: /etc/inputrc
+    regexp: "^set completion-ignore-case"
+    line: set completion-ignore-case On
+
+- name: Setup Apt
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Packages | ensure apt list dir exists
+      ansible.builtin.file:
+        path: /var/lib/apt/lists/
+        state: directory
+        mode: 0755
+    - name: Update Apt Cache
+      ansible.builtin.apt:
+        cache_valid_time: 600
+        update_cache: true
+
+- name: Install default Packages
+  ansible.builtin.package:
+    name: "{{ default_packages }}"
+    state: present
+
+- name: Update all packages to their latest version
+  when: ansible_os_family == "Debian"
+  ansible.builtin.apt:
+    upgrade: yes
+  tags:
+    - never
+    - apt-upgrade
+
+- name: Set Max journal log size
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    line: SystemMaxUse=200M
+  notify: Restart journald

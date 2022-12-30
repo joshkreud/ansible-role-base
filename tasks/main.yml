@@ -1,0 +1,41 @@
+---
+- name: Set Hostname
+  become: true
+  when: hostname is defined and ansible_facts.virtualization_type not in ('docker', 'container', 'containerd')
+  ansible.builtin.import_tasks: hostname.yml
+
+- name: Set Basic Settings
+  become: true
+  ansible.builtin.import_tasks: basic-setup.yml
+
+- name: Setup Users
+  become: true
+  ansible.builtin.import_tasks: users.yml
+  when: deploy_users is defined
+  tags:
+    - users
+
+- name: Lockdown SSH
+  become: true
+  ansible.builtin.import_tasks: lockdown-ssh.yml
+  tags: ["ssh-lockdown"]
+
+- name: Setup UFW
+  become: true
+  ansible.builtin.import_tasks: lockdown-ufw.yml
+  tags: ["ufw"]
+
+- name: Lockdown fail2ban
+  become: true
+  ansible.builtin.import_tasks: fail2ban.yml
+  tags: ["fail2ban"]
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Reset ssh connection # To enforce group changes
+  ansible.builtin.meta: reset_connection
+
+- name: Check Reboot needed
+  become: true
+  ansible.builtin.import_tasks: reboot.yml
