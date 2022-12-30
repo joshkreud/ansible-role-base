@@ -1,19 +1,23 @@
 ---
 - name: Restart sshd
+  become: true
   ansible.builtin.service:
     name: sshd
     state: restarted
 
 - name: Restart journald
+  become: true
   ansible.builtin.service:
     name: systemd-journald
     state: restarted
 
 - name: Restart ufw
+  become: true
   community.general.ufw:
     state: reloaded
 
 - name: Restart fail2ban
+  become: true
   ansible.builtin.service:
     name: "fail2ban"
     state: "restarted"
