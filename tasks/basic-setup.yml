@@ -23,14 +23,6 @@
     name: "{{ default_packages }}"
     state: present
 
-- name: Update all packages to their latest version
-  when: ansible_os_family == "Debian"
-  ansible.builtin.apt:
-    upgrade: yes
-  tags:
-    - never
-    - apt-upgrade
-
 - name: Set timezone
   community.general.timezone:
     name: "{{ time_zone }}"
