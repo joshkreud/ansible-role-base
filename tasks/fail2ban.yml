@@ -14,14 +14,20 @@
     mode: 0644
   notify: Restart fail2ban
 
+- name: Set Fail2ban to read systemd logs
+  community.general.ini_file:
+    path: /etc/fail2ban/jail.conf
+    section: sshd
+    option: backend
+    value: systemd
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'systemd'
+
 - name: Enable Fail2Ban
   become: yes
   ansible.builtin.systemd:
     name: fail2ban
-    enabled: yes
-
-- name: Start Fail2Ban
-  become: yes
-  ansible.builtin.systemd:
-    name: fail2ban
     state: started
+    enabled: yes
