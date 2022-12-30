@@ -18,5 +18,10 @@
   become: yes
   ansible.builtin.systemd:
     name: fail2ban
-    state: started
     enabled: yes
+
+- name: Start Fail2Ban
+  become: yes
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: started
