@@ -11,18 +11,8 @@
     regexp: "^IPV6="
 
 - name: Enable UFW
-  block:
-    - name: Enable UFW
-      community.general.ufw:
-        state: enabled
-  rescue:
-    - name: Link ip6tables to ip6tables-nft
-      community.general.alternatives:
-        name: ip6tables
-        path: /usr/sbin/ip6tables-nft
-    - name: Enable UFW
-      community.general.ufw:
-        state: enabled
+  community.general.ufw:
+    state: enabled
 
 - name: Set SSH limiting in UFW
   community.general.ufw:

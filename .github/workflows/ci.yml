@@ -40,7 +40,6 @@ jobs:
       matrix:
         distro:
           - ubuntu2204
-          - ubuntu2004
           - debian11
           - debian10
 
