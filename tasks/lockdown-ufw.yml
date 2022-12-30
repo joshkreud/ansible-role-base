@@ -5,8 +5,18 @@
     state: present
 
 - name: Enable UFW
-  community.general.ufw:
-    state: enabled
+  block:
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+  rescue:
+    - name: Alternatives link created
+      community.general.alternatives:
+        name: ip6tables
+        path: /usr/sbin/ip6tables-nft
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
 
 - name: Set SSH limiting in UFW
   community.general.ufw:
