@@ -17,3 +17,8 @@
   ansible.builtin.service:
     name: "fail2ban"
     state: "restarted"
+
+- name: Reboot System
+  become: yes
+  ansible.builtin.reboot:
+    reboot_timeout: 1800
