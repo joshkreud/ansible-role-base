@@ -8,18 +8,52 @@
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "PasswordAuthentication"
-    line: "PasswordAuthentication no"
+    line: "PasswordAuthentication {{ 'no' if lockdown_ssh_disable_password_auth else 'yes' }}"
     state: present
     backup: yes
-  notify:
-    - Restart sshd
+  notify: Restart sshd
 
 - name: Disable SSH Root Login
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^PermitRootLogin"
-    line: "PermitRootLogin no"
+    line: "PermitRootLogin {{ 'no' if lockdown_ssh_disable_root_login else 'yes' }}"
     state: present
     backup: yes
-  notify:
-    - Restart sshd
+  notify: Restart sshd
+
+- name: SSH Enable Agent forwarding
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^AllowAgentForwarding"
+    line: "AllowAgentForwarding {{ 'no' if lockdown_ssh_allow_agent_forward else 'yes' }}"
+    state: present
+    backup: yes
+  notify: Restart sshd
+
+- name: Make sure SSH Agent forwarding also works on sudo
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers.d/ssh_key_forward
+    line: "Defaults env_keep += SSH_AUTH_SOCK"
+    state: "{{ 'present' if lockdown_ssh_allow_agent_forward_sudo else 'absent' }}"
+    backup: yes
+    validate: "visudo -cf %s"
+    mode: 0440
+    create: yes
+  notify: Restart sshd
+  tags: ["skip_ansible_lint"] # because of state template
+
+- name: Install Known_Hosts
+  become: yes
+  ansible.builtin.blockinfile:
+    path: "{{ item.dest }}"
+    block: "{{ lockdown_ssh_known_hosts }}"
+    marker: "<!-- {mark} ANSIBLE MANAGED SSH lockdown_ssh_known_hosts -->"
+    create: yes
+    owner: "{{ item.owner }}"
+    mode: 0600
+  loop:
+    - dest: /root/.ssh/known_hosts
+      owner: root
+    - dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
+      owner: "{{ ansible_user }}"

@@ -1,12 +1,19 @@
 ---
 time_zone: Europe/Berlin
-lockdown_allow_ports:
+lockdown_ssh_disable_password_auth: yes
+lockdown_ssh_disable_root_login: yes
+lockdown_ssh_allow_agent_forward: no
+lockdown_ssh_allow_agent_forward_sudo: no
+lockdown_ssh_known_hosts: "" # Multiline Block string to put into known_hosts
+lockdown_ufw_enable: yes
+lockdown_ufw_allow_ports:
   - port: 80
     proto: tcp
   - port: 443
     proto: tcp
 default_packages:
   - git
+  - tree
   - htop
   - iotop
   - vim

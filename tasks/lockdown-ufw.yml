@@ -10,10 +10,6 @@
     line: IPV6=yes
     regexp: "^IPV6="
 
-- name: Enable UFW
-  community.general.ufw:
-    state: enabled
-
 - name: Set SSH limiting in UFW
   community.general.ufw:
     rule: limit
@@ -22,16 +18,22 @@
   notify: Restart ufw
 
 - name: Allow UFW Ports
-  when: lockdown_allow_ports is defined
+  when: lockdown_ufw_allow_ports is defined
   community.general.ufw:
     rule: allow
     port: "{{ item.port }}"
     proto: "{{ item.proto }}"
-  loop: "{{ lockdown_allow_ports }}"
+  loop: "{{ lockdown_ufw_allow_ports }}"
   notify: Restart ufw
   tags: [skip_ansible_lint]
 
+- name: Enable UFW
+  community.general.ufw:
+    state: "{{ 'enabled' if lockdown_ufw_enable  else 'disabled' }}"
+  tags: ["skip_ansible_lint"] # Because of state template
+
 - name: Deny Other Ports
   community.general.ufw:
-    policy: deny
+    policy: "{{ 'deny' if lockdown_ufw_enable  else 'allow' }}"
   notify: Restart ufw
+  tags: ["skip_ansible_lint"] # Because of state template
