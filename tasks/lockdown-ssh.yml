@@ -56,4 +56,4 @@
     - dest: /root/.ssh/known_hosts
       owner: root
     - dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
-      owner: "{{ ansible_user }}"
+      owner: "{{ ansible_user_id }}"
