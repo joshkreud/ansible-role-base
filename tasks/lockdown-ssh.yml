@@ -4,7 +4,7 @@
     name: openssh-server
     state: present
 
-- name: "Set SSH Password Authentication: {{ lockdown_ssh_disable_password_auth }}"
+- name: "Set SSH Password Authentication Diable: {{ lockdown_ssh_disable_password_auth }}"
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "PasswordAuthentication"
@@ -13,7 +13,7 @@
     backup: yes
   notify: Restart sshd
 
-- name: "Set SSH Root Login: {{ lockdown_ssh_disable_root_login }}"
+- name: "Set SSH Root Login Disable: {{ lockdown_ssh_disable_root_login }}"
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^PermitRootLogin"
@@ -22,7 +22,7 @@
     backup: yes
   notify: Restart sshd
 
-- name: "Set SSH Agent forwarding: {{ lockdown_ssh_allow_agent_forward }}"
+- name: "Set SSH Agent forwarding Disable: {{ lockdown_ssh_allow_agent_forward }}"
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^AllowAgentForwarding"
