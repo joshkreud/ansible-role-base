@@ -32,3 +32,11 @@
     path: /etc/systemd/journald.conf
     line: SystemMaxUse=200M
   notify: Restart journald
+
+- name: Set includedir in sudoers
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    line: "#includedir /etc/sudoers.d"
+    state: present
+    validate: "/usr/sbin/visudo -cf %s"
