@@ -4,32 +4,14 @@
     name: openssh-server
     state: present
 
-- name: "Set SSH Password Authentication Diable: {{ lockdown_ssh_disable_password_auth }}"
+- name: "Set SSH Config Options"
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
-    regexp: "PasswordAuthentication"
-    line: "PasswordAuthentication {{ 'no' if lockdown_ssh_disable_password_auth else 'yes' }}"
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
     state: present
     backup: yes
-  notify: Restart sshd
-
-- name: "Set SSH Root Login Disable: {{ lockdown_ssh_disable_root_login }}"
-  ansible.builtin.lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: "^PermitRootLogin"
-    line: "PermitRootLogin {{ 'no' if lockdown_ssh_disable_root_login else 'yes' }}"
-    state: present
-    backup: yes
-  notify: Restart sshd
-
-- name: "Set SSH Agent forwarding Disable: {{ lockdown_ssh_allow_agent_forward }}"
-  ansible.builtin.lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: "^AllowAgentForwarding"
-    line: "AllowAgentForwarding {{ 'no' if lockdown_ssh_allow_agent_forward else 'yes' }}"
-    state: present
-    backup: yes
-  notify: Restart sshd
+  loop: "{{ lockdown_ssh_config_default | combine(lockdown_ssh_config_default) | dict2items }}"
 
 - name: "Set sudoers ssh key forward to: {{ lockdown_ssh_allow_agent_forward_sudo }}"
   ansible.builtin.lineinfile:
