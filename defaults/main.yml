@@ -26,3 +26,5 @@ lockdown_ufw_allow_ports:
     proto: tcp
   - port: 443
     proto: tcp
+
+lockdown_install_fail2ban: false

@@ -28,6 +28,7 @@
 - name: Lockdown fail2ban
   become: true
   ansible.builtin.import_tasks: fail2ban.yml
+  when: lockdown_install_fail2ban
   tags: ["fail2ban"]
 
 - name: Flush handlers
