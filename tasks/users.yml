@@ -22,10 +22,3 @@
   loop_control:
     label: "{{ item.name }}"
   notify: Restart sshd
-
-- name: Allow specified Users to sudo
-  ansible.builtin.template:
-    src: sudoers.j2
-    dest: /etc/sudoers.d/sudoers
-    validate: "visudo -cf %s"
-    mode: 0440
