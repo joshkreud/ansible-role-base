@@ -39,4 +39,5 @@
 
 - name: Check Reboot needed
   become: true
+  tags: ["reboot"]
   ansible.builtin.import_tasks: reboot.yml
