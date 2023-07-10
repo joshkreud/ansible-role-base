@@ -13,7 +13,6 @@ ssh_tcp_port: 22
 lockdown_ssh_config: {} # Override sub values of "lockdown_ssh_config_default"
 lockdown_ssh_config_default:
   PasswordAuthentication: "no"
-  HashKnownHosts: "yes"
   PermitRootLogin: "no"
   AllowAgentForwarding: "no"
 lockdown_ssh_allow_agent_forward_sudo: no # Keep SSH Agent env Var in sudo
