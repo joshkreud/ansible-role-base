@@ -11,6 +11,7 @@
     line: "{{ item.key }} {{ item.value }}"
     state: present
     backup: yes
+  notify: Restart sshd
   loop: "{{ lockdown_ssh_config_default | combine(lockdown_ssh_config_default) | dict2items }}"
 
 - name: "Set sudoers ssh key forward to: {{ lockdown_ssh_allow_agent_forward_sudo }}"
