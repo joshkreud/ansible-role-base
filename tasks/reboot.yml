@@ -3,7 +3,7 @@
   register: reboot_required_file
   ansible.builtin.stat:
     path: /var/run/reboot-required
-    get_md5: no
+
 
 - name: Apply Reboot
   when: reboot_required_file.stat.exists
