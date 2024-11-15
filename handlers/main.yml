@@ -26,3 +26,4 @@
   become: yes
   ansible.builtin.reboot:
     reboot_timeout: 1800
+  when: "'reboot' not in ansible_skip_tags"

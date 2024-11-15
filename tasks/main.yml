@@ -41,3 +41,4 @@
   become: true
   tags: ["reboot"]
   ansible.builtin.import_tasks: reboot.yml
+  when: "'reboot' not in ansible_skip_tags"
