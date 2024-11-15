@@ -1,0 +1,17 @@
+---
+- name: Restart sshd or ssh
+  become: true
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - sshd
+    - ssh
+  register: service_result
+  ignore_errors: true
+
+- name: Check if any service restarted successfully
+  ansible.builtin.fail:
+    msg: "Failed to restart sshd or ssh"
+  when: service_result.results | selectattr('failed', 'undefined') | list | length > 0
+

@@ -1,21 +1,6 @@
 ---
 - name: Restart sshd
-  block:
-    - name: Restart sshd or ssh
-      become: true
-      ansible.builtin.service:
-        name: "{{ item }}"
-        state: restarted
-      loop:
-        - sshd
-        - ssh
-      register: service_result
-      ignore_errors: true
-
-    - name: Check if any service restarted successfully
-      ansible.builtin.fail:
-        msg: "Failed to restart sshd or ssh"
-      when: service_result.results | rejectattr('failed', 'defined') | list | length == 0
+  ansible.builtin.include_tasks: handlers/restart_sshd.yml
 
 - name: Restart journald
   become: true
