@@ -14,4 +14,3 @@
   ansible.builtin.fail:
     msg: "Failed to restart sshd or ssh"
   when: service_result.results | selectattr('failed', 'undefined') | list | length > 0
-
