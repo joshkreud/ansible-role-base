@@ -27,3 +27,5 @@ lockdown_ufw_allow_ports:
     proto: tcp
 
 lockdown_install_fail2ban: false
+
+base_auto_reboot: false # Reboot Server if Reboot flag is set (works on Ubuntu Server)

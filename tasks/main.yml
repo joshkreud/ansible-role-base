@@ -40,4 +40,4 @@
   become: true
   tags: ["reboot"]
   ansible.builtin.import_tasks: reboot.yml
-  when: "'reboot' not in ansible_skip_tags"
+  when: "'reboot' in ansible_tags or base_auto_reboot"
