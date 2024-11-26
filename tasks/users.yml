@@ -5,6 +5,7 @@
     state: present
     groups: "{{ item.groups }}"
     shell: "/bin/bash"
+  when: deploy_users is defined
   loop: "{{ deploy_users }}"
   loop_control:
     label: "{{ item.name }}"
