@@ -11,6 +11,7 @@
 - name: Setup Users
   become: true
   ansible.builtin.import_tasks: users.yml
+  when: deploy_users is defined
   tags:
     - users
 
