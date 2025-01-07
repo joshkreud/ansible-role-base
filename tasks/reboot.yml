@@ -4,29 +4,35 @@
   ansible.builtin.stat:
     path: /var/run/reboot-required
 
-
-- name: Apply Reboot
+- name: Check reboot needed
   when: reboot_required_file.stat.exists
   block:
-    - name: Read reboot Reason
-      ansible.builtin.command: cat /var/run/reboot-required.pkgs
-      changed_when: False
-      register: reboot_reason
+    - name: Log Hosts that need a reboot
+      ansible.builtin.command: echo "Im just here as a placeholder so that the ansible output is more readable"
+      changed_when: true
 
-    - name: Packages Requesting Reboot
-      ansible.builtin.debug:
-        msg: "{{ reboot_reason.stdout }}"
+    - name: Apply Reboot
+      when: "('reboot' in ansible_run_tags or base_auto_reboot )"
+      block:
+        - name: Read reboot Reason
+          ansible.builtin.command: cat /var/run/reboot-required.pkgs
+          changed_when: False
+          register: reboot_reason
 
-    - name: Reboot the Debian or Ubuntu server
-      ansible.builtin.reboot:
-        msg: "Reboot initiated by Ansible due to kernel updates"
-        connect_timeout: 5
-        reboot_timeout: 300
-        pre_reboot_delay: 0
-        post_reboot_delay: 30
-        test_command: uptime
+        - name: Packages Requesting Reboot
+          ansible.builtin.debug:
+            msg: "{{ reboot_reason.stdout }}"
 
-    - name: Remove Reboot Flag
-      ansible.builtin.file:
-        path: /var/run/reboot-required
-        state: absent
+        - name: Reboot the Debian or Ubuntu server
+          ansible.builtin.reboot:
+            msg: "Reboot initiated by Ansible due to kernel updates"
+            connect_timeout: 5
+            reboot_timeout: 300
+            pre_reboot_delay: 0
+            post_reboot_delay: 30
+            test_command: uptime
+
+        - name: Remove Reboot Flag
+          ansible.builtin.file:
+            path: /var/run/reboot-required
+            state: absent

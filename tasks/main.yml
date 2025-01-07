@@ -41,4 +41,3 @@
   become: true
   tags: ["reboot"]
   ansible.builtin.import_tasks: reboot.yml
-  when: "'reboot' in ansible_run_tags or base_auto_reboot"
