@@ -1,0 +1,20 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Create mock reboot-required file
+      ansible.builtin.file:
+        path: /var/run/reboot-required
+        state: touch
+
+    - name: Create mock reboot-required.pkgs file
+      ansible.builtin.copy:
+        content: "test-package"
+        dest: /var/run/reboot-required.pkgs
+
+    - name: Include reboot tasks
+      ansible.builtin.include_tasks: ../../tasks/reboot.yml
+      vars:
+        ansible_run_tags: []
+        base_auto_reboot: false
