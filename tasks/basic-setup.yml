@@ -23,6 +23,12 @@
     name: "{{ default_packages }}"
     state: present
 
+- name: Upgrade all packages
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+  when: upgrade_all_packages
+
 - name: Set timezone
   community.general.timezone:
     name: "{{ time_zone }}"

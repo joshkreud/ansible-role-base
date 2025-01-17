@@ -1,5 +1,6 @@
 ---
 time_zone: Europe/Berlin
+upgrade_all_packages: yes
 default_packages:
   - git
   - tree
