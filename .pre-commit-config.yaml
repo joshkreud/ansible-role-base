@@ -1,0 +1,10 @@
+repos:
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v6.16.0
+    hooks:
+      - id: ansible-lint
+        name: ansible-lint
+        entry: ansible-lint
+        language: python
+        types: [yaml]
+        files: ^(tasks/|handlers/|defaults/|meta/|molecule/|playbooks/|roles/|group_vars/|host_vars/).+\.yml$
