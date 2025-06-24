@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "ansible>=10.0.0",
-    "ansible-lint>=6.8.7",
+    "ansible-lint>=6.16",
     "molecule>=24.12.0",
     "molecule-docker>=2.1.0",
 ]
