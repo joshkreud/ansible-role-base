@@ -11,18 +11,18 @@
       ansible.builtin.command: echo "Im just here as a placeholder so that the ansible output is more readable"
       changed_when: true
 
+    - name: Read reboot Reason
+      ansible.builtin.command: cat /var/run/reboot-required.pkgs
+      changed_when: False
+      register: reboot_reason
+
+    - name: Packages Requesting Reboot
+      ansible.builtin.debug:
+        msg: "{{ reboot_reason.stdout }}"
+
     - name: Apply Reboot
       when: "('reboot' in ansible_run_tags or base_auto_reboot )"
       block:
-        - name: Read reboot Reason
-          ansible.builtin.command: cat /var/run/reboot-required.pkgs
-          changed_when: False
-          register: reboot_reason
-
-        - name: Packages Requesting Reboot
-          ansible.builtin.debug:
-            msg: "{{ reboot_reason.stdout }}"
-
         - name: Reboot the Debian or Ubuntu server
           ansible.builtin.reboot:
             msg: "Reboot initiated by Ansible due to kernel updates"
