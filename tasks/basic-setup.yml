@@ -24,6 +24,7 @@
     state: present
 
 - name: Upgrade all packages
+  when: upgrade_all_packages
   block:
     - name: Upgrade Ubuntu/Debian packages
       ansible.builtin.apt:
@@ -31,7 +32,6 @@
         autoremove: true
         upgrade: "full"
       when: ansible_os_family == "Debian"
-  when: upgrade_all_packages
 
 - name: Set timezone
   community.general.timezone:
