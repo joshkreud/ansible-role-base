@@ -24,9 +24,13 @@
     state: present
 
 - name: Upgrade all packages
-  ansible.builtin.package:
-    name: "*"
-    state: latest
+  block:
+    - name: Upgrade Ubuntu/Debian packages
+      ansible.builtin.apt:
+        autoclean: true
+        autoremove: true
+        upgrade: "full"
+      when: ansible_os_family == "Debian"
   when: upgrade_all_packages
 
 - name: Set timezone
