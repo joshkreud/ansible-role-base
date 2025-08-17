@@ -14,7 +14,7 @@
   community.general.ufw:
     rule: limit
     port: "{{ ssh_tcp_port }}"
-    proto: tcp
+    proto: any
   notify: Restart ufw
 
 - name: Allow UFW Ports
@@ -27,13 +27,9 @@
   notify: Restart ufw
   tags: [skip_ansible_lint]
 
-- name: "Set UFW State: {{ lockdown_ufw_enable }}"
+- name: "Set UFW State: {{ 'enabled/deny' if lockdown_ufw_enable  else 'disabled/allow' }}"
   community.general.ufw:
     state: "{{ 'enabled' if lockdown_ufw_enable  else 'disabled' }}"
-  tags: ["skip_ansible_lint"] # Because of state template
-
-- name: "Set UFW Policy: {{ lockdown_ufw_enable }}"
-  community.general.ufw:
     policy: "{{ 'deny' if lockdown_ufw_enable  else 'allow' }}"
   notify: Restart ufw
   tags: ["skip_ansible_lint"] # Because of state template
