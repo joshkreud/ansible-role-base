@@ -33,3 +33,6 @@
     policy: "{{ 'deny' if lockdown_ufw_enable  else 'allow' }}"
   notify: Restart ufw
   tags: ["skip_ansible_lint"] # Because of state template
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
